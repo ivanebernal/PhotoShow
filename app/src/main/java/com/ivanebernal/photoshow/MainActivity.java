@@ -27,28 +27,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView mainRecyclerView = (RecyclerView) findViewById(R.id.main_recycler_view);
-        mainRecyclerView.setLayoutManager(new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false));
-        mainRecyclerView.setAdapter(new PhotoViewAdapter());
-
         Intent intent = new Intent(this, ConnectInstaIntent.class);
         intent.setAction(ApplicationData.CONECT_INSTA_ACTION);
 
         connectToInstagram();
 
-        serviceConnection = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                ConnectInstaIntent.MyBinder myBinder = (ConnectInstaIntent.MyBinder) service;
-                mBoundService = myBinder.getService();
-                mServiceBound = true;
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-
-            }
-        };
+//        serviceConnection = new ServiceConnection() {
+//            @Override
+//            public void onServiceConnected(ComponentName name, IBinder service) {
+//                ConnectInstaIntent.MyBinder myBinder = (ConnectInstaIntent.MyBinder) service;
+//                mBoundService = myBinder.getService();
+//                mServiceBound = true;
+//            }
+//
+//            @Override
+//            public void onServiceDisconnected(ComponentName name) {
+//
+//            }
+//        };
         //bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
 
     }

@@ -1,10 +1,18 @@
 package com.ivanebernal.photoshow;
 
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
+import com.ivanebernal.photoshow.InstagramService.InstagramService;
+import com.ivanebernal.photoshow.Models.Datum;
+import com.ivanebernal.photoshow.Models.UserRecentMedia;
 import com.squareup.picasso.Picasso;
 
 import java.io.BufferedInputStream;
@@ -18,55 +26,36 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PhotoActivity extends AppCompatActivity {
+public class PhotoActivity extends AppCompatActivity implements PhotoFragment.OnFragmentInteractionListener, InstagramTransport.onFragmentChange {
 
     private String ACCESS_TOKEN;
-    ImageView imageView;
     List<String> imageUrls = new ArrayList<>();
+    List<String> imageCaptions = new ArrayList<>();
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
-        imageView = (ImageView) findViewById(R.id.profile_pic);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         String uri = String.valueOf(getIntent().getData());
-        Log.d("URI", uri);
         ACCESS_TOKEN = uri.split("=")[1];
         Log.d("CODE", ACCESS_TOKEN);
-        getPhotoWithHashtag();
-//        Picasso.with(getApplicationContext()).load(imageUrls.get(0)).into(imageView);
+        InstagramTransport instagramTransport = new InstagramTransport(this);
+        instagramTransport.getUserRecentMedia(ACCESS_TOKEN);
     }
 
-    private void getPhotoWithHashtag(){
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL("https://api.instagram.com/v1/users/254859349?access_token=" + ACCESS_TOKEN);
-                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                    urlConnection.setRequestMethod("GET");
-                    InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
-                    String response = convertInputStreamToString(inputStream);
-                    Log.i("GOT", String.valueOf(urlConnection.getResponseCode()));
-                    Log.i("RESPONSE", response);
-//                    String imageUrl = response.substring(response.indexOf("https"), response.indexOf("jpg")+3);
-//                    imageUrls.add(imageUrl);
-//                    Log.i("URL", imageUrl);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
     }
 
-    private String convertInputStreamToString(InputStream inputStream) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        String line;
-        String result = "";
-        while ((line = bufferedReader.readLine()) != null) result += line;
-        if(inputStream != null) inputStream.close();
-        return result;
+    @Override
+    public void fragmentChange(UserRecentMedia userMedia) {
+        progressBar.setVisibility(View.GONE);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.photo_hoder, PhotoFragment.newInstance(userMedia))
+                .commit();
     }
 }

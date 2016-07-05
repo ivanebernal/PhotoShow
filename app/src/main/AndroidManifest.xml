@@ -35,6 +35,7 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
+        <activity android:name=".PhotoDetailActivity"></activity>
     </application>
 
 </manifest>
