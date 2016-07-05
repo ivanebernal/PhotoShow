@@ -1,6 +1,8 @@
 package com.ivanebernal.photoshow;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -66,10 +68,10 @@ public class PhotoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_photo, container, false);
         RecyclerView photoView = (RecyclerView) view.findViewById(R.id.photos);
-        try {
+        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             photoView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        }catch (Exception e){
-
+        }else{
+            photoView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         }
         photoView.setAdapter(new PhotoViewAdapter(userMedia, getContext()));
         return view;

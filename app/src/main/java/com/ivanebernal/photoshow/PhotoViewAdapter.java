@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ivanebernal.photoshow.Models.Datum;
+import com.ivanebernal.photoshow.Models.StandardResolution;
 import com.ivanebernal.photoshow.Models.UserRecentMedia;
 import com.squareup.picasso.Picasso;
 
@@ -48,8 +49,15 @@ public class PhotoViewAdapter extends RecyclerView.Adapter<PhotoViewAdapter.Phot
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, PhotoDetailActivity.class);
-                intent.putExtra("URL", urls.get(position));
+                Datum userMediaAt = userMedia.getData().get(position);
+                StandardResolution standardResolution = userMediaAt.getImages().getStandardResolution();
+                intent.putExtra("URL", standardResolution.getUrl());
                 intent.putExtra("CAPTION", captions.get(position));
+                intent.putExtra("HEIGHT", standardResolution.getHeight());
+                intent.putExtra("WIDTH", standardResolution.getWidth());
+                intent.putExtra("LIKES", userMediaAt.getLikes().getCount().intValue());
+                intent.putExtra("PROFILE_PIC", userMediaAt.getUser().getProfilePicture());
+                intent.putExtra("USER_NAME", userMediaAt.getUser().getUsername());
                 context.startActivity(intent);
             }
         });
@@ -67,7 +75,7 @@ public class PhotoViewAdapter extends RecyclerView.Adapter<PhotoViewAdapter.Phot
         public PhotoViewHolder(View itemView) {
             super(itemView);
             mImageView = (ImageView) itemView.findViewById(R.id.photo_holder);
-            mDescriptionTextView = (TextView) itemView.findViewById(R.id.photo_description);
+            //mDescriptionTextView = (TextView) itemView.findViewById(R.id.photo_description);
             mNameTextView = (TextView) itemView.findViewById(R.id.photo_author_name);
         }
 
