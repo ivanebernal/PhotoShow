@@ -1,6 +1,5 @@
 package com.ivanebernal.photoshow.Models;
 
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 

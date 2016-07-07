@@ -1,32 +1,25 @@
 package com.ivanebernal.photoshow;
 
-import android.content.Intent;
+import android.net.Uri;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.ivanebernal.photoshow.Models.UserRecentMedia;
 
-public class PhotoDetailActivity extends AppCompatActivity {
+public class PhotoDetailActivity extends AppCompatActivity implements PhotoDetailFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_detail);
-        ImageView photoImageView = (ImageView) findViewById(R.id.photo_detailed);
-        TextView captionTextView = (TextView) findViewById(R.id.caption);
-        TextView likesText = (TextView) findViewById(R.id.num_likes);
-        ImageView profilePic = (ImageView) findViewById(R.id.user_pic);
-        TextView userName = (TextView) findViewById(R.id.user_name);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager_details);
+        viewPager.setAdapter(new PicDetailAdapter(getSupportFragmentManager(), (UserRecentMedia) getIntent().getParcelableExtra("USER_MEDIA")));
+        viewPager.setCurrentItem(getIntent().getIntExtra("POSITION", 0));
+    }
 
-        Intent intent = getIntent();
-        Picasso.with(this).load(intent.getStringExtra("URL")).resize(intent.getIntExtra("HEIGHT", 1)*2,intent.getIntExtra("WIDTH", 1)*2).into(photoImageView);
-        captionTextView.setText(intent.getStringExtra("CAPTION"));
-        likesText.setText(intent.getIntExtra("LIKES", 0)+"");
-        userName.setText(intent.getStringExtra("USER_NAME"));
-        Picasso.with(this).load(intent.getStringExtra("PROFILE_PIC")).into(profilePic);
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
     }
 }

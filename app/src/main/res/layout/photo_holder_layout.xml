@@ -6,7 +6,6 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/link"
         android:contentDescription="@string/placeholder"
         android:id="@+id/photo_holder"/>
 
@@ -16,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="#000000"
-        android:alpha="0.8"
+        android:alpha="0.7"
         android:layout_alignBottom="@+id/photo_holder"
         android:orientation="vertical">
 

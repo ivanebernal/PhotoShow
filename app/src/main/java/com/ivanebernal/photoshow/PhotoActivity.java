@@ -28,9 +28,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class PhotoActivity extends AppCompatActivity implements PhotoFragment.OnFragmentInteractionListener, InstagramTransport.onFragmentChange {
 
-    private String ACCESS_TOKEN;
-    List<String> imageUrls = new ArrayList<>();
-    List<String> imageCaptions = new ArrayList<>();
     private ProgressBar progressBar;
 
     @Override
@@ -39,7 +36,7 @@ public class PhotoActivity extends AppCompatActivity implements PhotoFragment.On
         setContentView(R.layout.activity_photo);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         String uri = String.valueOf(getIntent().getData());
-        ACCESS_TOKEN = uri.split("=")[1];
+        String ACCESS_TOKEN = uri.split("=")[1];
         Log.d("CODE", ACCESS_TOKEN);
         InstagramTransport instagramTransport = new InstagramTransport(this);
         instagramTransport.getUserRecentMedia(ACCESS_TOKEN);

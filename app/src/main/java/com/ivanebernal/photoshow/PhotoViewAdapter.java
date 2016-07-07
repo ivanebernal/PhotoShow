@@ -2,16 +2,18 @@ package com.ivanebernal.photoshow;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Point;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ivanebernal.photoshow.Models.Datum;
-import com.ivanebernal.photoshow.Models.StandardResolution;
 import com.ivanebernal.photoshow.Models.UserRecentMedia;
 import com.squareup.picasso.Picasso;
 
@@ -49,15 +51,8 @@ public class PhotoViewAdapter extends RecyclerView.Adapter<PhotoViewAdapter.Phot
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, PhotoDetailActivity.class);
-                Datum userMediaAt = userMedia.getData().get(position);
-                StandardResolution standardResolution = userMediaAt.getImages().getStandardResolution();
-                intent.putExtra("URL", standardResolution.getUrl());
-                intent.putExtra("CAPTION", captions.get(position));
-                intent.putExtra("HEIGHT", standardResolution.getHeight());
-                intent.putExtra("WIDTH", standardResolution.getWidth());
-                intent.putExtra("LIKES", userMediaAt.getLikes().getCount().intValue());
-                intent.putExtra("PROFILE_PIC", userMediaAt.getUser().getProfilePicture());
-                intent.putExtra("USER_NAME", userMediaAt.getUser().getUsername());
+                intent.putExtra("USER_MEDIA", userMedia);
+                intent.putExtra("POSITION", position);
                 context.startActivity(intent);
             }
         });
@@ -70,18 +65,22 @@ public class PhotoViewAdapter extends RecyclerView.Adapter<PhotoViewAdapter.Phot
 
     public class PhotoViewHolder extends RecyclerView.ViewHolder{
         private TextView mNameTextView;
-        private TextView mDescriptionTextView;
         private ImageView mImageView;
+        private int holderDimen;
+
         public PhotoViewHolder(View itemView) {
             super(itemView);
             mImageView = (ImageView) itemView.findViewById(R.id.photo_holder);
-            //mDescriptionTextView = (TextView) itemView.findViewById(R.id.photo_description);
             mNameTextView = (TextView) itemView.findViewById(R.id.photo_author_name);
+            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            holderDimen = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT? (size.x/2) - 100: (size.y/2) -100;
         }
 
         public void setData(String url, String caption){
-            Picasso.with(context).load(url).into(mImageView);
-//            mDescriptionTextView.setText(description);
+            Picasso.with(context).load(url).resize(holderDimen,holderDimen).into(mImageView);
             mNameTextView.setText(caption);
         }
     }

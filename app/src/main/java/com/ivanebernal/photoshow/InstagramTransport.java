@@ -37,11 +37,13 @@ public class InstagramTransport {
         userRecentMediaCall.enqueue(new Callback<UserRecentMedia>() {
             @Override
             public void onResponse(Call<UserRecentMedia> call, Response<UserRecentMedia> response) {
-                Log.d("CONNECTED", response.body().toString());
-                userRecentMedia.setData(response.body().getData());
-                userRecentMedia.setMeta(response.body().getMeta());
-                userRecentMedia.setPagination(response.body().getPagination());
-                mContext.fragmentChange(userRecentMedia);
+                Log.d("Response code", String.valueOf(response.code()));
+                if(response.code() == 200) {
+                    userRecentMedia.setData(response.body().getData());
+                    userRecentMedia.setMeta(response.body().getMeta());
+                    userRecentMedia.setPagination(response.body().getPagination());
+                    mContext.fragmentChange(userRecentMedia);
+                }
             }
 
             @Override
@@ -52,7 +54,7 @@ public class InstagramTransport {
     }
 
     interface onFragmentChange{
-        public void fragmentChange(UserRecentMedia userRecentMedia);
+        void fragmentChange(UserRecentMedia userRecentMedia);
     }
 
 }

@@ -1,6 +1,5 @@
 package com.ivanebernal.photoshow;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -13,10 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ivanebernal.photoshow.Models.UserRecentMedia;
-
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,14 +37,13 @@ public class PhotoFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
+     * @param userMedia Parameter 1.
      * @return A new instance of fragment PhotoFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static PhotoFragment newInstance(UserRecentMedia param1) {
+    public static PhotoFragment newInstance(UserRecentMedia userMedia) {
         PhotoFragment fragment = new PhotoFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_PARAM1, param1);
+        args.putParcelable(ARG_PARAM1, userMedia);
         fragment.setArguments(args);
         return fragment;
     }
@@ -105,7 +99,6 @@ public class PhotoFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }
